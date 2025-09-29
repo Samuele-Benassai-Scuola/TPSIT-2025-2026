@@ -1,8 +1,12 @@
 package it.benassai.horse;
 
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class RacingHorse extends Thread {
+    private static final Lock mutex = new ReentrantLock();
+
     private final Random random = new Random();
 
     public final int speed = 20;
@@ -79,8 +83,14 @@ public class RacingHorse extends Thread {
                 System.out.println(horseName + " distance: " + currentDistance + "m");
             }
             
-            endTime = System.currentTimeMillis();
-            HorseRace.getInstance().addToRanking(this);
+            try {
+                mutex.lock();
+                endTime = System.currentTimeMillis();
+                HorseRace.getInstance().addToRanking(this);
+            }
+            finally {
+                mutex.unlock();
+            }
         } catch (InterruptedException e) {
             System.err.println(e.getMessage());
             Thread.currentThread().interrupt();
