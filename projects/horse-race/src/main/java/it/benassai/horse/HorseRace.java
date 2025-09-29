@@ -64,6 +64,7 @@ public class HorseRace {
 
     public void race() {
         initHorses();
+        ranking.clear();
         try {
             for (RacingHorse horse : horses) {
                 horse.start();
