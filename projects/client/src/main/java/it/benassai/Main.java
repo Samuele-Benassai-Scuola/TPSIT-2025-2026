@@ -26,5 +26,6 @@ public class Main {
         (new ClientRunner(socket)).run();
 
         socket.close();
+        scanner.close();
     }
 }
