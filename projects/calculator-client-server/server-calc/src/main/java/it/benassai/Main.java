@@ -15,7 +15,7 @@ public class Main {
         try {
             while (true) {
                 Socket socket = serverSocket.accept();
-                System.out.println("connesso");
+                System.out.println("connesso a " + socket.getInetAddress());
 
                 // Binda ad altra porta
                 Thread thread = new Thread(new ServerProtocol(socket));
