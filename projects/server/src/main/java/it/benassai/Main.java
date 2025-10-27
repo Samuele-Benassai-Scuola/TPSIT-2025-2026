@@ -12,11 +12,18 @@ public class Main {
 
         ServerSocket serverSocket = new ServerSocket(3000);
 
-        Socket socket = serverSocket.accept();
-        System.out.println("connesso");
+        try {
+            while (true) {
+                Socket socket = serverSocket.accept();
+                System.out.println("connesso");
 
-        (new ServerRunner(socket)).run();
-
-        serverSocket.close();
+                // Binda ad altra porta
+                Thread thread = new Thread(new ServerRunner(socket));
+                thread.start();
+            }
+        }
+        finally {
+            serverSocket.close();
+        }
     }
 }
