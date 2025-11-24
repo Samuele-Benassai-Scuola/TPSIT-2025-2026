@@ -1,11 +1,10 @@
 package it.benassai;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import it.benassai.Threads.ListenerRunnable;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -15,16 +14,8 @@ public class Main {
             Socket socket = serverSocket.accept();
             System.out.println("connesso a " + socket.getInetAddress());
 
-            BufferedReader socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter socketOut = new PrintWriter(socket.getOutputStream(), true);
-
-            String message = socketIn.readLine();
-            System.out.println(message);
-
-            while (!message.equals("")) {
-                message = socketIn.readLine();
-                System.out.println(message);
-            }
+            Thread thread = new Thread(new ListenerRunnable(socket));
+            thread.start();
         }
     }
 }
