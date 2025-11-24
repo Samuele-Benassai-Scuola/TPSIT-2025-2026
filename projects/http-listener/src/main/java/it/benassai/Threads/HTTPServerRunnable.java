@@ -29,7 +29,7 @@ public class HTTPServerRunnable implements Runnable {
             List<String> requestBody = new ArrayList<>();
 
             requestLine = socketIn.readLine();
-            String[] requestLineArgs = requestLine.split(" ");
+            String[] requestLineArgs = requestLine.split(" ", 3);
 
             String line = socketIn.readLine();
             while (!line.equals("")) {
@@ -47,18 +47,32 @@ public class HTTPServerRunnable implements Runnable {
 
             //
 
-            String message = "ciao";
-
-            String responseLine = requestLineArgs[2] + " 200 OK";
-
+            String responseLine;
             List<String> responseHeader = new ArrayList<>();
+            String responseBody;
 
-            responseHeader.add("Content-Type: text/html; charset=UTF-8");
-            responseHeader.add("Server: BenaServer");
-            responseHeader.add("Content-Length: " + message.getBytes().length);
+            if (requestLineArgs[1].equals("/ciao")) {
+                String message = "<strong>ciao</strong> a tutti";
 
-            String responseBody = message;
+                responseLine = requestLineArgs[2] + " 200 OK";
 
+                responseHeader.add("Content-Type: text/html; charset=UTF-8");
+                responseHeader.add("Server: BenaServer");
+                responseHeader.add("Content-Length: " + message.getBytes().length);
+
+                responseBody = message;
+            }
+            else {
+                String message = "Risorsa non trovata";
+
+                responseLine = requestLineArgs[2] + " 404 Not Found";
+
+                responseHeader.add("Content-Type: text/html; charset=UTF-8");
+                responseHeader.add("Server: BenaServer");
+                responseHeader.add("Content-Length: " + message.getBytes().length);
+
+                responseBody = message;
+            }
 
             socketOut.println(responseLine);
             for (String head : responseHeader) {
