@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import it.benassai.Threads.ListenerRunnable;
+import it.benassai.Threads.HTTPServerRunnable;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -14,7 +14,7 @@ public class Main {
             Socket socket = serverSocket.accept();
             System.out.println("connesso a " + socket.getInetAddress());
 
-            Thread thread = new Thread(new ListenerRunnable(socket));
+            Thread thread = new Thread(new HTTPServerRunnable(socket));
             thread.start();
         }
     }
